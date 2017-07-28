@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 import java.io.IOException;
@@ -81,6 +82,17 @@ public class FlatController {
         //model.addAttribute("city", city);
         model.addAttribute("flats", flatRepository.findByCity(city));
         model.addAttribute("cits", flatRepository.findAllCity());
+
+        return "indexFlats";
+    }
+
+
+    @RequestMapping(value = "/flats", method = RequestMethod.GET)
+    public String viewCustomers(@RequestParam(name = "p", defaultValue = "1") int pageNumber, Model model) {
+        String result = "<html>";
+
+        List<Flat> flats = flatService.getPage(pageNumber);
+        model.addAttribute("flats", flats);
 
         return "indexFlats";
     }

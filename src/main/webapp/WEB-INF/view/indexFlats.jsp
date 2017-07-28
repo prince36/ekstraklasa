@@ -78,7 +78,7 @@
                         <table class="table table-hover table-striped">
                             <thead>
                             <tr>
-                                <th>Miastp</th>
+                                <th>Miasto</th>
                                 <th>Dzielnica</th>
                                 <th>Liczba Pokoi</th>
                                 <th>od kogo</th>
@@ -94,10 +94,22 @@
                                     <td><c:if test="${empty flat.district}"> - - - </c:if>
                                             ${flat.district}</td>
                                     <td>${flat.num_rooms}</td>
-                                    <td>${flat.type_advertiser} </td>
-                                    <td>${flat.price} zł</td>
-                                    <td>${flat.extra_rent} zł</td>
-                                    <td>${flat.bail} zł</td>
+                                    <td>
+                                        <c:if test="${flat.type_advertiser==0}"> Prywatne </c:if>
+                                        <c:if test="${flat.type_advertiser==1}"> Agencja </c:if>
+                                    </td>
+                                    <td>
+                                        <c:if test="${empty flat.price}"> - - - </c:if>
+                                        <c:if test="${!empty flat.price}"> ${flat.price} zł </c:if>
+                                    </td>
+                                    <td>
+                                        <c:if test="${empty flat.extra_rent}"> - - - </c:if>
+                                        <c:if test="${!empty flat.extra_rent}"> ${flat.extra_rent} zł </c:if>
+                                    </td>
+                                    <td>
+                                        <c:if test="${empty flat.bail}"> - - - </c:if>
+                                        <c:if test="${!empty flat.bail}"> ${flat.bail} zł </c:if>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </c:forEach>

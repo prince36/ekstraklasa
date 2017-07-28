@@ -5,12 +5,13 @@ import com.ekstraklasa.football.model.Car;
 import com.ekstraklasa.football.model.Flat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface FlatRepository extends JpaRepository<Flat, Long> {
+public interface FlatRepository extends JpaRepository<Flat, Long>, PagingAndSortingRepository<Flat, Long> {
 
     //@Query("SELECT c.url FROM Flat c WHERE c.url = ?1")
     List<Flat> findByUrl(String url);

@@ -22,8 +22,8 @@ public class ScheduledTask {
     @Autowired
     FlatRepository flatRepository;
 
-    private static final Logger log = (Logger) LoggerFactory.getLogger(ScheduledTask.class);
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    //private static final Logger log = (Logger) LoggerFactory.getLogger(ScheduledTask.class);
+    //private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
     @Scheduled(fixedRate = 600000)
     public void executeTask() throws IOException {
