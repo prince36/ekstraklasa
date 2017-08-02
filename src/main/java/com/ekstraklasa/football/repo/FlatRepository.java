@@ -22,4 +22,9 @@ public interface FlatRepository extends JpaRepository<Flat, Long>, PagingAndSort
     @Query("SELECT DISTINCT c.place  FROM Flat c ORDER BY c.place asc")
     List<String> findAllCity();
 
+    @Query("SELECT c FROM Flat c WHERE c.place = ?1 and c.district = ?4 AND c.price > ?2 and c.price < ?3 and c.num_rooms=?5 ORDER BY c.district asc, c.street asc")
+    List<Flat> findForOrder(String city, Integer price_from, Integer price_to, String district, Integer numrooms);
+
+
+
 }

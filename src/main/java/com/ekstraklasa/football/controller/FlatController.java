@@ -1,13 +1,12 @@
 package com.ekstraklasa.football.controller;
 
-import com.ekstraklasa.football.model.Car;
-import com.ekstraklasa.football.model.CountModelCar;
-import com.ekstraklasa.football.model.Flat;
-import com.ekstraklasa.football.model.FlatDetail;
+import com.ekstraklasa.football.model.*;
 import com.ekstraklasa.football.parser.od_parser;
 import com.ekstraklasa.football.repo.FlatRepository;
+import com.ekstraklasa.football.repo.OrderRepository;
 import com.ekstraklasa.football.service.CarService;
 import com.ekstraklasa.football.service.FlatService;
+import com.ekstraklasa.football.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +31,13 @@ public class FlatController {
     @Autowired
     private FlatService flatService;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderService orderService;
+
+
     //Parsowanie OtoDom
     @RequestMapping(value = "/pars01", method = RequestMethod.GET)
     public String homePage(Map<String, Object> map) throws IOException {
@@ -39,15 +45,15 @@ public class FlatController {
 
         //pobieramy urle
         ArrayList<String> allUrls = new ArrayList<String>();
-        allUrls = od1.getUrls(1,5);
+        allUrls = od1.getUrls_olx(1,5);
 
         ArrayList<String> allUrls2 = flatService.removeDuplicate(allUrls);
         System.out.println("Liczba nowych elementów: "+allUrls2.size());
         //parsujemy strony
         for (String url : allUrls2) {
-            flatRepository.save(od1.Parser(url));
+            flatRepository.save(od1.Parser_olx(url));
         }
-        return "dashboard";
+        return "indexFlats2";
     }
 
     //ALL FLATS
@@ -58,7 +64,7 @@ public class FlatController {
 
 
         map.put("cits", flatRepository.findAllCity());
-        return "indexFlats";
+        return "indexFlats2";
     }
 
     //One FLat
@@ -69,7 +75,7 @@ public class FlatController {
 
 
         map.put("cits", flatRepository.findAllCity());
-        return "indexFlats";
+        return "indexFlats2";
     }
     //PAGE BRAND
 
@@ -83,7 +89,7 @@ public class FlatController {
         model.addAttribute("flats", flatRepository.findByCity(city));
         model.addAttribute("cits", flatRepository.findAllCity());
 
-        return "indexFlats";
+        return "indexFlats2";
     }
 
 
@@ -94,7 +100,20 @@ public class FlatController {
         List<Flat> flats = flatService.getPage(pageNumber);
         model.addAttribute("flats", flats);
 
-        return "indexFlats";
+        return "indexFlats2";
+    }
+
+    @RequestMapping(value = "/testorder")
+    public String flatsforOrder(Model model) {
+
+        Order ord = orderRepository.findOne((long) 1);
+        System.out.println("test81="+ord.getLocation());
+
+        List<Flat> flats = orderService.getFlatsPerOrder(orderRepository.findOne((long) 1));
+        System.out.println("test80");
+
+        model.addAttribute("flats", flats);
+        return "indexFlats2";
     }
 
 }

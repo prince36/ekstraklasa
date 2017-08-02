@@ -26,7 +26,7 @@ public class od_parser {
     @Autowired
     FlatService flatService;
 
-    public Flat Parser(String url) throws IOException {
+    public Flat Parser_od(String url) throws IOException {
 
         System.out.println("Jestem na - "+url);
 
@@ -186,7 +186,7 @@ public class od_parser {
         return flat;
     }
 
-    public ArrayList<String> getUrls(Integer pageStart, Integer pageEnd) throws IOException {
+    public ArrayList<String> getUrls_od(Integer pageStart, Integer pageEnd) throws IOException {
         ArrayList<String> allUrls = new ArrayList<String>();
 
         for (int i = pageStart; i < pageEnd+1 ; i++) {
@@ -196,7 +196,7 @@ public class od_parser {
                 Elements cols = link.select("a[href]");
                 for (Element col : cols) {
                     String item = col.getElementsByTag("a").attr("href");
-                        if (!allUrls.contains(item)) {
+                        if (!allUrls.contains(item.substring(0, item.indexOf('#')))) {
                             allUrls.add(item.substring(0, item.indexOf('#')));
                         }
                 }
@@ -204,4 +204,305 @@ public class od_parser {
         }
         return allUrls;
     }
+
+
+
+
+
+    public ArrayList<String> getUrls_olx(Integer pageStart, Integer pageEnd) throws IOException {
+        ArrayList<String> allUrls = new ArrayList<String>();
+
+        for (int i = pageStart; i < pageEnd+1 ; i++) {
+            Document doc = Jsoup.connect("https://www.olx.pl/nieruchomosci/mieszkania/wynajem/?page="+i).get();
+            Elements links = doc.getElementsByClass("offer");
+            for (Element link : links) {
+                Elements cols = link.select("a[href]");
+                for (Element col : cols) {
+                    String item = col.getElementsByTag("a").attr("href");
+                    if (item.length()>20 && item.contains("olx.pl/")) {
+                        if (!allUrls.contains(item.substring(0, item.indexOf('#')))) {
+                            System.out.println("kk45=" + item.substring(0, item.indexOf('#')));
+                            allUrls.add(item.substring(0, item.indexOf('#')));
+                        }
+                    }
+                }
+            }
+        }
+        //#offers_table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(1) > td:nth-child(2) > div > h3 > a
+        //#offers_table > tbody > tr:nth-child(6) > td > table > tbody > tr:nth-child(1) > td:nth-child(2) > div > h3 > a
+
+        return allUrls;
+    }
+
+    public Flat Parser_olx(String url) throws IOException {
+
+        System.out.println("Jestem na - "+url);
+
+
+        //url="https://www.olx.pl/oferta/wynajme-mieszkanie-CID3-IDmlVj2.html";
+        Document doc = Jsoup.connect(url).get();
+        Flat flat = new Flat();
+        FlatDetail flatd = new FlatDetail();
+
+        //FlatDetail dlatdetail = new FlatDetail();
+        Elements newsHeadlines;// = doc.select("#parameters > ul:nth-child(1)");
+
+        flat.setUrl(url);
+
+        //title;+-
+        newsHeadlines = doc.select("#offerdescription > div.offer-titlebox > h1");
+        flat.setTitle(newsHeadlines.text());
+
+        //description;+-
+        newsHeadlines = doc.select("#textContent > p");
+        flatd.setDescription(newsHeadlines.text());
+
+
+        //price;+
+        newsHeadlines = doc.select("#offeractions > div.price-label > strong");
+        flat.setPrice(Integer.parseInt(newsHeadlines.text().replaceAll( "[^\\d]", "" )));
+
+        //0-właściciel //1-pośrednik
+        //type_advertiser;
+        newsHeadlines = doc.select("body > div.article-offer > section.section-offer-aside.container > aside > div.offer-aside-primary > div.offer-aside-group > div.box-contact-info.box-contact-info-private.text-center.hidden-print > h6");
+        if(newsHeadlines.text().contains("prywatna")){flat.setType_advertiser(0);}
+        else flat.setType_advertiser(1);
+
+        //String place;+
+        newsHeadlines = doc.select("#offerdescription > div.offer-titlebox > div.offer-titlebox__details > a > strong");
+        flat.setPlace(newsHeadlines.text().substring(0,newsHeadlines.text().indexOf(",")));
+
+        //String district;+
+        newsHeadlines = doc.select("#offerdescription > div.offer-titlebox > div.offer-titlebox__details > a > strong");
+        flat.setDistrict(newsHeadlines.text().substring(newsHeadlines.text().lastIndexOf(",")+2));
+
+        //String street;+
+        newsHeadlines = doc.select("#offerdescription > div.offer-titlebox > div.offer-titlebox__details > a > strong");
+        //flat.setStreet(newsHeadlines.text());
+
+        //Data utworzenia
+        flat.setDatecreate(Calendar.getInstance().getTime());
+
+        //FlatDetail flatDetail;
+        newsHeadlines = doc.select("#offerdescription > div.offer-titlebox > h1");
+        flat.setTitle(newsHeadlines.text());
+
+        String label_param_floor_strong1 = "";
+        String label_param_floor1 ="";
+        String label_param_floor_a1="";
+        String varparam;
+        for (int i = 1; i < 5; i++) {
+            for (int j = 1; j < 3 ; j++) {
+
+                label_param_floor_strong1 = "#offerdescription > div.clr.descriptioncontent.marginbott20 > table > tbody > tr:nth-child("+i+") > td:nth-child("+j+") > table > tbody > tr > th";
+                label_param_floor1 = "#offerdescription > div.clr.descriptioncontent.marginbott20 > table > tbody > tr:nth-child("+i+") > td.col > table > tbody > tr > td > strong";
+                label_param_floor_a1 = "#offerdescription > div.clr.descriptioncontent.marginbott20 > table > tbody > tr:nth-child("+i+") > td:nth-child("+j+") > table > tbody > tr > td > strong > a";
+
+                newsHeadlines = doc.select(label_param_floor_strong1);
+
+                if (newsHeadlines.text().contains("Oferta od")) {
+                    newsHeadlines = doc.select(label_param_floor_a1);
+                    if(newsHeadlines.text().contains("Osoby prywatnej")){flat.setType_advertiser(0);}
+                    else flat.setType_advertiser(1);
+                }
+                varparam = "Umeblowane";
+                if (newsHeadlines.text().contains(varparam)) {
+                    newsHeadlines = doc.select(label_param_floor_a1);
+                    //flatd.setBuilding_material(newsHeadlines.text());
+                    //todo
+                }
+                if (newsHeadlines.text().contains("Powierzchnia")) {
+                    newsHeadlines = doc.select(label_param_floor1);
+                    flat.setArea(Integer.parseInt(newsHeadlines.text().replaceAll("[^\\d]", "")));
+                }
+                varparam = "Czynsz (dodatkowo)";
+                if (newsHeadlines.text().contains(varparam)) {
+                    newsHeadlines = doc.select(label_param_floor1);
+                    flat.setExtra_rent(Integer.parseInt(newsHeadlines.text().replaceAll("[^\\d]", "")));
+                }
+                varparam = "Poziom";
+                if (newsHeadlines.text().contains(varparam)) {
+                    newsHeadlines = doc.select(label_param_floor_a1);
+                    if (newsHeadlines.text().contains("Parter")){
+                        flatd.setFloor("0");
+                    }
+                    else flatd.setFloor(newsHeadlines.text());
+                }
+                varparam = "Rodzaj zabudowy";
+                if (newsHeadlines.text().contains(varparam)) {
+                    newsHeadlines = doc.select(label_param_floor_a1);
+                    flatd.setType_of_building(newsHeadlines.text());
+                }
+                varparam = "Liczba pokoi";
+                if (newsHeadlines.text().contains(varparam)) {
+                    newsHeadlines = doc.select(label_param_floor_a1);
+                    if (newsHeadlines.text().contains("Kawalerka")){
+                        flat.setNum_rooms(1);
+                    }
+                    else flat.setNum_rooms(Integer.parseInt(newsHeadlines.text().replaceAll("[^\\d]", "")));
+                }
+            }
+        }
+        flat.setFlatDetail(flatd);
+        flat.flatToString();
+
+        //timeout
+        try {
+            Thread.sleep(3500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return flat;
+    }
+
+
+    public ArrayList<String> getUrls_gt(Integer pageStart, Integer pageEnd) throws IOException {
+        ArrayList<String> allUrls = new ArrayList<String>();
+
+        for (int i = pageStart; i < pageEnd+1 ; i++) {
+            Document doc = Jsoup.connect("https://www.gumtree.pl/s-mieszkania-i-domy-do-wynajecia/page-"+i+"/v1c9008p"+i).get();
+            Elements links = doc.getElementsByClass("offer");
+            for (Element link : links) {
+                Elements cols = link.select("a[href]");
+                for (Element col : cols) {
+                    String item = col.getElementsByTag("a").attr("href");
+                    if (item.length()>20 && item.contains("olx.pl/")) {
+                        if (!allUrls.contains(item.substring(0, item.indexOf('#')))) {
+                            System.out.println("kk45=" + item.substring(0, item.indexOf('#')));
+                            allUrls.add(item.substring(0, item.indexOf('#')));
+                        }
+                    }
+                }
+            }
+        }
+        //#offers_table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(1) > td:nth-child(2) > div > h3 > a
+        //#offers_table > tbody > tr:nth-child(6) > td > table > tbody > tr:nth-child(1) > td:nth-child(2) > div > h3 > a
+
+        return allUrls;
+    }
+
+
+    public Flat Parser_gt(String url) throws IOException {
+
+        System.out.println("Jestem na - "+url);
+
+
+        //url="https://www.olx.pl/oferta/wynajme-mieszkanie-CID3-IDmlVj2.html";
+        Document doc = Jsoup.connect(url).get();
+        Flat flat = new Flat();
+        FlatDetail flatd = new FlatDetail();
+
+        //FlatDetail dlatdetail = new FlatDetail();
+        Elements newsHeadlines;// = doc.select("#parameters > ul:nth-child(1)");
+
+        flat.setUrl(url);
+
+        //title;+-
+        newsHeadlines = doc.select("#offerdescription > div.offer-titlebox > h1");
+        flat.setTitle(newsHeadlines.text());
+
+        //description;+-
+        newsHeadlines = doc.select("#textContent > p");
+        flatd.setDescription(newsHeadlines.text());
+
+
+        //price;+
+        newsHeadlines = doc.select("#offeractions > div.price-label > strong");
+        flat.setPrice(Integer.parseInt(newsHeadlines.text().replaceAll( "[^\\d]", "" )));
+
+        //0-właściciel //1-pośrednik
+        //type_advertiser;
+        newsHeadlines = doc.select("body > div.article-offer > section.section-offer-aside.container > aside > div.offer-aside-primary > div.offer-aside-group > div.box-contact-info.box-contact-info-private.text-center.hidden-print > h6");
+        if(newsHeadlines.text().contains("prywatna")){flat.setType_advertiser(0);}
+        else flat.setType_advertiser(1);
+
+        //String place;+
+        newsHeadlines = doc.select("#offerdescription > div.offer-titlebox > div.offer-titlebox__details > a > strong");
+        flat.setPlace(newsHeadlines.text().substring(0,newsHeadlines.text().indexOf(",")));
+
+        //String district;+
+        newsHeadlines = doc.select("#offerdescription > div.offer-titlebox > div.offer-titlebox__details > a > strong");
+        flat.setDistrict(newsHeadlines.text().substring(newsHeadlines.text().lastIndexOf(",")+2));
+
+        //String street;+
+        newsHeadlines = doc.select("#offerdescription > div.offer-titlebox > div.offer-titlebox__details > a > strong");
+        //flat.setStreet(newsHeadlines.text());
+
+        //Data utworzenia
+        flat.setDatecreate(Calendar.getInstance().getTime());
+
+        //FlatDetail flatDetail;
+        newsHeadlines = doc.select("#offerdescription > div.offer-titlebox > h1");
+        flat.setTitle(newsHeadlines.text());
+
+        String label_param_floor_strong1 = "";
+        String label_param_floor1 ="";
+        String label_param_floor_a1="";
+        String varparam;
+        for (int i = 1; i < 5; i++) {
+            for (int j = 1; j < 3 ; j++) {
+
+                label_param_floor_strong1 = "#offerdescription > div.clr.descriptioncontent.marginbott20 > table > tbody > tr:nth-child("+i+") > td:nth-child("+j+") > table > tbody > tr > th";
+                label_param_floor1 = "#offerdescription > div.clr.descriptioncontent.marginbott20 > table > tbody > tr:nth-child("+i+") > td.col > table > tbody > tr > td > strong";
+                label_param_floor_a1 = "#offerdescription > div.clr.descriptioncontent.marginbott20 > table > tbody > tr:nth-child("+i+") > td:nth-child("+j+") > table > tbody > tr > td > strong > a";
+
+                newsHeadlines = doc.select(label_param_floor_strong1);
+
+                if (newsHeadlines.text().contains("Oferta od")) {
+                    newsHeadlines = doc.select(label_param_floor_a1);
+                    if(newsHeadlines.text().contains("Osoby prywatnej")){flat.setType_advertiser(0);}
+                    else flat.setType_advertiser(1);
+                }
+                varparam = "Umeblowane";
+                if (newsHeadlines.text().contains(varparam)) {
+                    newsHeadlines = doc.select(label_param_floor_a1);
+                    //flatd.setBuilding_material(newsHeadlines.text());
+                    //todo
+                }
+                if (newsHeadlines.text().contains("Powierzchnia")) {
+                    newsHeadlines = doc.select(label_param_floor1);
+                    flat.setArea(Integer.parseInt(newsHeadlines.text().replaceAll("[^\\d]", "")));
+                }
+                varparam = "Czynsz (dodatkowo)";
+                if (newsHeadlines.text().contains(varparam)) {
+                    newsHeadlines = doc.select(label_param_floor1);
+                    flat.setExtra_rent(Integer.parseInt(newsHeadlines.text().replaceAll("[^\\d]", "")));
+                }
+                varparam = "Poziom";
+                if (newsHeadlines.text().contains(varparam)) {
+                    newsHeadlines = doc.select(label_param_floor_a1);
+                    if (newsHeadlines.text().contains("Parter")){
+                        flatd.setFloor("0");
+                    }
+                    else flatd.setFloor(newsHeadlines.text());
+                }
+                varparam = "Rodzaj zabudowy";
+                if (newsHeadlines.text().contains(varparam)) {
+                    newsHeadlines = doc.select(label_param_floor_a1);
+                    flatd.setType_of_building(newsHeadlines.text());
+                }
+                varparam = "Liczba pokoi";
+                if (newsHeadlines.text().contains(varparam)) {
+                    newsHeadlines = doc.select(label_param_floor_a1);
+                    if (newsHeadlines.text().contains("Kawalerka")){
+                        flat.setNum_rooms(1);
+                    }
+                    else flat.setNum_rooms(Integer.parseInt(newsHeadlines.text().replaceAll("[^\\d]", "")));
+                }
+            }
+        }
+        flat.setFlatDetail(flatd);
+        flat.flatToString();
+
+        //timeout
+        try {
+            Thread.sleep(3500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return flat;
+    }
+
+
+
 }

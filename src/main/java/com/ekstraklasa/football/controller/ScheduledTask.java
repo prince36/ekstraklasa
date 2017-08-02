@@ -25,20 +25,33 @@ public class ScheduledTask {
     //private static final Logger log = (Logger) LoggerFactory.getLogger(ScheduledTask.class);
     //private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Scheduled(fixedRate = 600000)
+    //co 20minut - 1200000
+
+    @Scheduled(fixedRate = 1200000)
     public void executeTask() throws IOException {
         od_parser od1 = new od_parser();
 
         //pobieramy urle
-        ArrayList<String> allUrls = new ArrayList<String>();
-        allUrls = od1.getUrls(1,5);
+        ArrayList<String> allUrls1 = new ArrayList<String>();
+        allUrls1 = od1.getUrls_od(1,5);
 
-
-        ArrayList<String> allUrls2 = flatService.removeDuplicate(allUrls);
-        System.out.println("Liczba nowych elementów: "+allUrls2.size());
+        ArrayList<String> allUrls11 = flatService.removeDuplicate(allUrls1);
+        System.out.println("Liczba nowych elementów: "+allUrls11.size());
         //parsujemy strony
-        for (String url : allUrls2) {
-            flatRepository.save(od1.Parser(url));
+        for (String url : allUrls11) {
+            flatRepository.save(od1.Parser_od(url));
         }
+
+        //pobieramy urle
+        ArrayList<String> allUrls2 = new ArrayList<String>();
+        allUrls2 = od1.getUrls_olx(1,5);
+
+        ArrayList<String> allUrls22 = flatService.removeDuplicate(allUrls2);
+        System.out.println("Liczba nowych elementów: "+allUrls22.size());
+        //parsujemy strony
+        for (String url : allUrls22) {
+            flatRepository.save(od1.Parser_olx(url));
+        }
+
     }
 }

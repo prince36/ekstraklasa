@@ -161,7 +161,7 @@ public class Flat implements Serializable{
 
     public void flatToString(){
         System.out.println(
-                "Flat: tytuł: "+
+                "Flat:[ tytuł: "+
                 getTitle()+", cena wynajmu: "+
                         getPrice()+", czynsz dodatkowo: : "+
                         getExtra_rent()+", url: "+
@@ -174,7 +174,7 @@ public class Flat implements Serializable{
                         getDistrict()+", data utworzenia: "+
                         getDatecreate()+", ulica: "+
                         getStreet()+" Materiał: "+
-                        flatDetail.getBuilding_material()
+                        flatDetail.getBuilding_material()+"]"
         );
     }
 
