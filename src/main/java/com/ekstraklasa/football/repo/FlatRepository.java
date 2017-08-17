@@ -3,6 +3,9 @@ package com.ekstraklasa.football.repo;
 
 import com.ekstraklasa.football.model.Car;
 import com.ekstraklasa.football.model.Flat;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -18,6 +21,12 @@ public interface FlatRepository extends JpaRepository<Flat, Long>, PagingAndSort
 
     @Query("SELECT c FROM Flat c WHERE c.place = ?1 ORDER BY c.district asc, c.street asc")
     List<Flat> findByCity(String city);
+
+    @Query("SELECT c FROM Flat c WHERE c.place = ?1 ORDER BY c.district asc, c.street asc")
+    List<Flat> findByCity(String city, Pageable pageable);
+
+    @Query("SELECT count(c) FROM Flat c where c.place=?1")
+    Long countByCity(String city);
 
     @Query("SELECT DISTINCT c.place  FROM Flat c ORDER BY c.place asc")
     List<String> findAllCity();

@@ -36,10 +36,13 @@ public class ScheduledTask {
         allUrls1 = od1.getUrls_od(1,5);
 
         ArrayList<String> allUrls11 = flatService.removeDuplicate(allUrls1);
-        System.out.println("Liczba nowych elementów: "+allUrls11.size());
+        System.out.println("TH: Liczba nowych elementów: "+allUrls11.size());
         //parsujemy strony
         for (String url : allUrls11) {
             flatRepository.save(od1.Parser_od(url));
+            //if(url == allUrls11.get(allUrls11.size()-1)) {
+            //    System.out.println("TH: Koniec");
+            //}
         }
 
         //pobieramy urle
@@ -52,6 +55,5 @@ public class ScheduledTask {
         for (String url : allUrls22) {
             flatRepository.save(od1.Parser_olx(url));
         }
-
     }
 }

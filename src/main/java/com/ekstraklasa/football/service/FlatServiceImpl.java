@@ -40,4 +40,10 @@ public class FlatServiceImpl implements FlatService {
         return flatRepository.findAll(request).getContent();
     }
 
+    public List<Flat> getPageforCity(int pageNumber, String city) {
+        PageRequest request = new PageRequest(pageNumber - 1, PAGESIZE, Sort.Direction.ASC, "idflat");
+
+        return flatRepository.findByCity(city, request);
+    }
+
 }

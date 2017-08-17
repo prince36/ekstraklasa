@@ -18,4 +18,5 @@ public interface FlatService  {
 
     List<Flat> getPage(int pageNumber);
 
+    List<Flat> getPageforCity(int pageNumber, String city);
 }

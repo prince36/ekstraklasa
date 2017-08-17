@@ -1,5 +1,5 @@
 package com.ekstraklasa.football.service;
-
+/*
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -32,3 +32,4 @@ public class EmailSenderImpl implements EmailSender{
         javaMailSender.send(mail);
     }
 }
+*/
