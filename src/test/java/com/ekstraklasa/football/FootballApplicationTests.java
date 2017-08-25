@@ -11,6 +11,7 @@ public class FootballApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		System.out.println("th13 inn");
 	}
 
 }
