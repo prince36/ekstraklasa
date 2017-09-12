@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/flats")
@@ -128,4 +126,26 @@ public class FlatController {
         return "indexFlats2";
     }
 
+    @RequestMapping(value = "/new", method = RequestMethod.GET)
+    public String newOrderFlats(Model model) {
+
+        Map< String, String > country1 = new LinkedHashMap<String, String>();
+        for (String countr : flatRepository.findAllCity()) {
+            try {
+                if (countr.length()>3) {
+                    country1.put(countr, countr);
+                }
+            }
+            catch (NullPointerException xx){
+                System.out.println("nullpointer");
+            }
+        }
+        country1.keySet();
+
+
+
+        model.addAttribute("cits", flatRepository.findAllCity());
+        model.addAttribute("cits_lhm", country1);
+        return "newOrder";
+    }
 }

@@ -60,7 +60,7 @@
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>A</b>LT</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>Flats</b>ogłoszenia</span>
+            <span class="logo-lg"><b>Flats </b>ogłoszenia</span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -81,7 +81,7 @@
                     <!-- Tasks: style can be found in dropdown.less -->
 
                     <!-- User Account: style can be found in dropdown.less -->
-                    <li class="dropdown user user-menu">
+                    <li class="dropdown user user-menu" style="display: none">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="/resources/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
                             <span class="hidden-xs">Admin</span>
@@ -135,7 +135,7 @@
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
             <!-- Sidebar user panel -->
-            <div class="user-panel">
+            <div class="user-panel" style="display: none">
                 <div class="pull-left image">
                     <img src="/resources/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                 </div>
@@ -171,6 +171,8 @@
                 <li><a href="${contextPath}/flats"><i class="fa fa-book"></i> <span>Mieszkania</span></a></li>
 
                 <li><a href="${contextPath}/flats/warszawa"><i class="fa fa-th"></i> <span>Mieszkania Warszawa</span></a></li>
+
+                <li><a href="${contextPath}/flats/new"><i class="fa fa-th"></i> <span>Nowe powiadomienie</span></a></li>
 
                 <li class="treeview">
                     <a href="#">
