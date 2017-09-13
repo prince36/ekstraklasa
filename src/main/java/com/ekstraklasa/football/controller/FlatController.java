@@ -10,12 +10,12 @@ import com.ekstraklasa.football.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.*;
 
@@ -126,8 +126,10 @@ public class FlatController {
         return "indexFlats2";
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String newOrderFlats(Model model) {
+
+
+    @GetMapping("/new")
+    public ModelAndView order() {
 
         Map< String, String > country1 = new LinkedHashMap<String, String>();
         for (String countr : flatRepository.findAllCity()) {
@@ -140,12 +142,46 @@ public class FlatController {
                 System.out.println("nullpointer");
             }
         }
-        country1.keySet();
+        //country1.keySet();
 
 
+        //model.addAttribute("cits", flatRepository.findAllCity());
+        //model.addAttribute("cits_lhm", country1);
+
+        //model.addAttribute("order", new Order());
+        return new ModelAndView("newOrder", "command", new Order());
+    }
+
+    @RequestMapping(value = "/new", method = RequestMethod.POST)
+    public String newOrderFlats(Model model, @Valid @ModelAttribute Order order, BindingResult result) {
+
+        if (result.hasErrors()) {
+            return "error";
+        }
+
+        Map< String, String > country1 = new LinkedHashMap<String, String>();
+        for (String countr : flatRepository.findAllCity()) {
+            try {
+                if (countr.length()>3) {
+                    country1.put(countr, countr);
+                }
+            }
+            catch (NullPointerException xx){
+                System.out.println("nullpointer");
+            }
+        }
+        //country1.keySet();
+
+        model.addAttribute("email", order.getEmail());
+        model.addAttribute("price_from", order.getPrice_from());
+        model.addAttribute("price_to", order.getPrice_to());
+        model.addAttribute("location", order.getLocation());
+        model.addAttribute("district", order.getDistrict());
+        model.addAttribute("numrooms", order.getNumrooms());
 
         model.addAttribute("cits", flatRepository.findAllCity());
         model.addAttribute("cits_lhm", country1);
         return "newOrder";
     }
+
 }

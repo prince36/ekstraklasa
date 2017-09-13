@@ -27,6 +27,7 @@ public class od_parser {
     @Autowired
     FlatService flatService;
 
+    // otodom.pl
     public Flat Parser_od(String url) throws IOException {
 
         Document doc = Jsoup.connect(url).get();
@@ -217,6 +218,7 @@ public class od_parser {
 
 
 
+    // olx.pl
     public ArrayList<String> getUrls_olx(Integer pageStart, Integer pageEnd) throws IOException {
         ArrayList<String> allUrls = new ArrayList<String>();
 
