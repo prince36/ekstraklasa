@@ -39,7 +39,7 @@
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form:form action="#" role="form" lpformnum="1" _lpchecked="1" method="post">
+                    <form:form action="#" commandName="newOrder" modelAttribute="newOrder" role="form" lpformnum="1" _lpchecked="1" method="post">
                         <div class="box-body">
 
                             <div class="form-group">

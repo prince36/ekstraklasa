@@ -168,11 +168,26 @@
 
                 </li>
 
+
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-folder"></i> <span>Powiadomienia</span>
+                        <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="${contextPath}/order/all"><i class="fa fa-circle-o"></i> Wszystkie</a></li>
+                        <li><a href="${contextPath}/order/new"><i class="fa fa-circle-o"></i> Dodaj nowe</a></li>
+                    </ul>
+                </li>
+
+
+
                 <li><a href="${contextPath}/flats"><i class="fa fa-book"></i> <span>Mieszkania</span></a></li>
 
-                <li><a href="${contextPath}/flats/warszawa"><i class="fa fa-th"></i> <span>Mieszkania Warszawa</span></a></li>
 
-                <li><a href="${contextPath}/flats/new"><i class="fa fa-th"></i> <span>Nowe powiadomienie</span></a></li>
 
                 <li class="treeview">
                     <a href="#">
