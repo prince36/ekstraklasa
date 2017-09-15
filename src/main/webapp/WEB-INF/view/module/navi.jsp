@@ -13,6 +13,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Serwis Ogłoszeniowy</title>
+    <link rel="shortcut icon" href="/resources/fabric.ico">
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -178,7 +179,7 @@
                 </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="${contextPath}/order/all"><i class="fa fa-circle-o"></i> Wszystkie</a></li>
+                        <li><a href="${contextPath}/order"><i class="fa fa-circle-o"></i> Wszystkie</a></li>
                         <li><a href="${contextPath}/order/new"><i class="fa fa-circle-o"></i> Dodaj nowe</a></li>
                     </ul>
                 </li>

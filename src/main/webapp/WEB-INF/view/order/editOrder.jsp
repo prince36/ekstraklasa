@@ -1,6 +1,14 @@
 <%--
   Created by IntelliJ IDEA.
   User: Ja
+  Date: 15.09.2017
+  Time: 18:25
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%--
+  Created by IntelliJ IDEA.
+  User: Ja
   Date: 11.09.2017
   Time: 18:31
   To change this template use File | Settings | File Templates.
@@ -10,7 +18,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!-- Navigation -->
-<jsp:include page="module/navi.jsp" />
+<jsp:include page="../module/navi.jsp" />
 
 
 <!-- Content Wrapper. Contains page content -->
@@ -104,4 +112,4 @@
 
 
 <!-- Navigation -->
-<jsp:include page="module/footer.jsp" />
+<jsp:include page="../module/footer.jsp" />

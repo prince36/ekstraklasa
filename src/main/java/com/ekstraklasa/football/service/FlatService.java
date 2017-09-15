@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public interface FlatService  {
@@ -19,4 +20,6 @@ public interface FlatService  {
     List<Flat> getPage(int pageNumber);
 
     List<Flat> getPageforCity(int pageNumber, String city);
+
+    Map<String, String> getAllCity();
 }

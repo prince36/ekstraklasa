@@ -7,11 +7,14 @@ import com.ekstraklasa.football.repo.FlatRepository;
 import com.ekstraklasa.football.repo.OrderRepository;
 import com.ekstraklasa.football.service.FlatService;
 import com.ekstraklasa.football.service.OrderService;
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +28,9 @@ public class OrderController {
 
     @Autowired
     private FlatRepository flatRepository;
+
+    @Autowired
+    private FlatService flatService;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -48,24 +54,17 @@ public class OrderController {
 
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String getAddNewOrderForm(Model model) {
+    public String getAddNewOrderForm(@RequestParam(name = "editOrder", defaultValue = "0") Order editOrder, Model model) {
 
-        Map< String, String > country12 = new LinkedHashMap<String, String>();
-        for (String countr : flatRepository.findAllCity()) {
-            try {
-                if (countr.length()>3) {
-                    country12.put(countr, countr);
-                }
-            }
-            catch (NullPointerException xx){
-                System.out.println("nullpointer");
-            }
-        }
-        Order newOrder = new Order();
+        Order newOrder;
+        if (editOrder!=null){
+            newOrder = editOrder;
+        } else newOrder = new Order();
+
         model.addAttribute("cits", flatRepository.findAllCity());
-        model.addAttribute("cits_lhm", country12);
+        model.addAttribute("cits_lhm", flatService.getAllCity());
         model.addAttribute("newOrder", newOrder);
-        return "newOrder";
+        return "order/newOrder";
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
@@ -75,30 +74,41 @@ public class OrderController {
             return "error";
         }
 
-        Map< String, String > country1 = new LinkedHashMap<String, String>();
-        for (String countr : flatRepository.findAllCity()) {
-            try {
-                if (countr.length()>3) {
-                    country1.put(countr, countr);
-                }
-            }
-            catch (NullPointerException xx){
-                System.out.println("nullpointer");
-            }
-        }
         orderRepository.save(newOrder);
-        return "redirect:/flats/new";
+        return "redirect:/order";
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.POST)
-    public String getAllOrders(@ModelAttribute Order newOrder, BindingResult result) {
-        String[] suppressedFields = result.getSuppressedFields();
-        if (result.hasErrors()) {
-            return "error";
-        }
-
-        orderRepository.save(newOrder);
-        return "redirect:/order/new";
+    @RequestMapping(value = {"","/","/all"}, method = RequestMethod.GET)
+    public String getAllOrders(Model model
+    ) {
+        model.addAttribute("orders", orderRepository.findAll());
+        model.addAttribute("cits", flatRepository.findAllCity());
+        return "order/indexOrder";
     }
 
+    @RequestMapping(value = "/{orderId}/{operation}", method = RequestMethod.GET)
+    public String editRemoveEmployee(@PathVariable("operation") String operation,
+                                     @PathVariable("orderId") long orderId,
+                                     final RedirectAttributes redirectAttributes,
+                                     Model model) {
+        if(operation.equals("delete")) {
+            System.out.println("test215");
+            if(orderService.deleteOrder(orderId)) {
+                redirectAttributes.addFlashAttribute("deletion", "success");
+                System.out.println("test216");
+            } else {
+                redirectAttributes.addFlashAttribute("deletion", "unsuccess");
+            }
+        } else if(operation.equals("edit")){
+            Order editOrder=orderRepository.findOne(orderId);
+            if(editOrder!=null) {
+                redirectAttributes.addAttribute("editOrder", editOrder);
+                //model.addAttribute("cits_lhm", flatService.getAllCity());
+                return "redirect:/order/new";
+            } else {
+                redirectAttributes.addFlashAttribute("status","notfound");
+            }
+        }
+        return "redirect:/order/all";
+    }
 }

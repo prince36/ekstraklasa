@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface OrderService {
     List<Flat> getFlatsPerOrder(Order order);
+    public Boolean deleteOrder(Long idorder);
 }
