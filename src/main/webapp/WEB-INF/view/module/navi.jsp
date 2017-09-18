@@ -181,6 +181,8 @@
                     <ul class="treeview-menu">
                         <li><a href="${contextPath}/order"><i class="fa fa-circle-o"></i> Wszystkie</a></li>
                         <li><a href="${contextPath}/order/new"><i class="fa fa-circle-o"></i> Dodaj nowe</a></li>
+                        <li><a href="${contextPath}/order/testorder"><i class="fa fa-circle-o"></i> Test</a></li>
+
                     </ul>
                 </li>
 

@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -31,9 +32,10 @@ public interface FlatRepository extends JpaRepository<Flat, Long>, PagingAndSort
     @Query("SELECT DISTINCT c.place  FROM Flat c ORDER BY c.place asc")
     List<String> findAllCity();
 
-    @Query("SELECT c FROM Flat c WHERE c.place = ?1 and c.district = ?4 AND c.price > ?2 and c.price < ?3 and c.num_rooms=?5 ORDER BY c.district asc, c.street asc")
-    List<Flat> findForOrder(String city, Integer price_from, Integer price_to, String district, Integer numrooms);
+    @Query("SELECT c FROM Flat c WHERE c.place = ?1 and c.district = ?2 AND c.price > ?3 and c.price < ?4 and c.num_rooms=?5 ORDER BY c.district asc, c.street asc")
+    List<Flat> findForOrder(String city, String district, Integer price_from, Integer price_to, Integer numrooms);
 
-
+    @Query("SELECT c FROM Flat c WHERE c.place = ?1 and c.district = ?2 AND c.price > ?3 and c.price < ?4 and c.num_rooms=?5 and c.datecreate>?6 ORDER BY c.district asc, c.street asc")
+    List<Flat> findForOrderByDate(String city, String district, Integer price_from, Integer price_to, Integer numrooms, Date lastpush);
 
 }

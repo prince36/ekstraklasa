@@ -41,14 +41,15 @@ public class OrderController {
     @RequestMapping(value = "/testorder")
     public String flatsforOrder(Model model) {
 
-        Order ord = orderRepository.findOne((long) 1);
-        System.out.println("test81="+ord.getLocation());
+        System.out.println("test698");
+        for (Flat x :
+                orderService.getFlatsPerOrderByDate(orderRepository.findOne((long) 80))) {
 
-        List<Flat> flats = orderService.getFlatsPerOrder(orderRepository.findOne((long) 1));
-        System.out.println("test80");
-
-        model.addAttribute("flats", flats);
-        return "indexFlats2";
+            System.out.println("test 555"+x.getTitle());
+        }
+        System.out.println("555 ilość ogłoszeń: "+orderService.getFlatsPerOrderByDate(orderRepository.findOne((long) 80)).size());
+        
+        return "redirect:/";
     }
 
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -23,10 +24,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Flat> getFlatsPerOrder(Order order) {
-        List<Flat> returnList;
-        returnList = flatRepository.findForOrder(order.getLocation(),order.getPrice_from(),order.getPrice_to(),order.getDistrict(),order.getNumrooms());
-        return returnList;
+        return flatRepository.findForOrder(order.getLocation(),order.getDistrict(),order.getPrice_from(),order.getPrice_to(),order.getNumrooms());
     }
+
+    @Override
+    public List<Flat> getFlatsPerOrderByDate(Order order) {
+        return flatRepository.findForOrderByDate(order.getLocation(),order.getDistrict(),order.getPrice_from(),order.getPrice_to(),order.getNumrooms(),order.getLastPush());
+    }
+
+
 
     @Override
     public Boolean deleteOrder(Long idorder) {
