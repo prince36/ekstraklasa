@@ -11,4 +11,6 @@ public interface OrderService {
     List<Flat> getFlatsPerOrderByDate(Order order);
     public Boolean deleteOrder(Long idorder);
 
+    public String goPush(Order order);
+
 }

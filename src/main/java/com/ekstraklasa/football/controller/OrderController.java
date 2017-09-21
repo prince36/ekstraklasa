@@ -5,26 +5,31 @@ import com.ekstraklasa.football.model.Order;
 import com.ekstraklasa.football.parser.od_parser;
 import com.ekstraklasa.football.repo.FlatRepository;
 import com.ekstraklasa.football.repo.OrderRepository;
+import com.ekstraklasa.football.service.EmailSender;
 import com.ekstraklasa.football.service.FlatService;
 import com.ekstraklasa.football.service.OrderService;
 import org.hibernate.annotations.Parameter;
+import org.omg.CORBA.Context;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Controller
 @RequestMapping("/order")
 public class OrderController {
+    @Autowired
+    private EmailSender emailSender;
 
     @Autowired
     private FlatRepository flatRepository;
@@ -39,7 +44,7 @@ public class OrderController {
     private OrderService orderService;
 
     @RequestMapping(value = "/testorder")
-    public String flatsforOrder(Model model) {
+    public String flatsforOrder(HttpServletRequest request) {
 
         System.out.println("test698");
         for (Flat x :
@@ -48,7 +53,17 @@ public class OrderController {
             System.out.println("test 555"+x.getTitle());
         }
         System.out.println("555 ilość ogłoszeń: "+orderService.getFlatsPerOrderByDate(orderRepository.findOne((long) 80)).size());
-        
+
+        //emailSender.sendEmail("", "","");
+
+        for (Order order :
+                orderRepository.findAll()) {
+            if (orderService.goPush(order).length()>20){
+                emailSender.sendEmail(order.getEmail(), "ANCKLOX", orderService.goPush(order));
+                order.setLastPush(Calendar.getInstance().getTime());
+                orderRepository.save(order);
+            }
+        }
         return "redirect:/";
     }
 

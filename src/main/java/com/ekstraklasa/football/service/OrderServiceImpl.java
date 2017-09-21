@@ -42,4 +42,14 @@ public class OrderServiceImpl implements OrderService {
         }
         else return false;
     }
+
+    @Override
+    public String goPush(Order order) {
+        StringBuilder sb = new StringBuilder();
+        for (Flat flat: getFlatsPerOrderByDate(order)) {
+            sb.append(flat.getUrl());
+            sb.append(" ");
+        }
+        return String.valueOf(sb);
+    }
 }
