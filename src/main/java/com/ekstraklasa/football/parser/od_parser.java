@@ -185,6 +185,9 @@ public class od_parser {
         catch (NumberFormatException a){
             System.out.println("NumberFormatException");
         }
+        catch (Exception s) {
+            System.out.println("bład");
+        }
 
 
         //timeout

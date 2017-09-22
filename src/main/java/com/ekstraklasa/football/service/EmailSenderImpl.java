@@ -20,7 +20,10 @@ public class EmailSenderImpl implements EmailSender{
 
     @Override
     public void sendEmail(String to, String subject, String content) throws MailException {
+
         SimpleMailMessage mail = new SimpleMailMessage();
+
+
         mail.setTo(to);
         mail.setFrom("app.dk.897@gmail.com");
         mail.setSubject(subject);

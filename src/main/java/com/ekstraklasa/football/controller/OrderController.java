@@ -54,13 +54,11 @@ public class OrderController {
         }
         System.out.println("555 ilość ogłoszeń: "+orderService.getFlatsPerOrderByDate(orderRepository.findOne((long) 80)).size());
 
-        //emailSender.sendEmail("", "","");
-
         for (Order order :
                 orderRepository.findAll()) {
             if (orderService.goPush(order).length()>20){
                 emailSender.sendEmail(order.getEmail(), "ANCKLOX", orderService.goPush(order));
-                order.setLastPush(Calendar.getInstance().getTime());
+                //order.setLastPush(Calendar.getInstance().getTime());
                 orderRepository.save(order);
             }
         }

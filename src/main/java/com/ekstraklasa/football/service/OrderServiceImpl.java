@@ -46,10 +46,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public String goPush(Order order) {
         StringBuilder sb = new StringBuilder();
+        sb.append("<html>");
         for (Flat flat: getFlatsPerOrderByDate(order)) {
+            sb.append("<p>");
             sb.append(flat.getUrl());
+            sb.append("</p>");
             sb.append(" ");
         }
+        sb.append("</html>");
         return String.valueOf(sb);
     }
 }

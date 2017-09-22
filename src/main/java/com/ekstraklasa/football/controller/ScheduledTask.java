@@ -28,7 +28,7 @@ public class ScheduledTask {
     //co 20minut - 1200000
 
 
-    //@Scheduled(fixedRate = 1200000)
+    @Scheduled(fixedRate = 1200000)
     public void executeTask() throws IOException {
         od_parser od1 = new od_parser();
 
