@@ -1,8 +1,11 @@
 package com.ekstraklasa.football.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "role")
 public class Role {

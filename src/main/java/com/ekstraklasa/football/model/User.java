@@ -1,15 +1,18 @@
 package com.ekstraklasa.football.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "user")
 public class User {
     private Long id;
     private String username;
-    private String password;
     private String email;
+    private String password;
     private String passwordConfirm;
     private Set<Role> roles;
 

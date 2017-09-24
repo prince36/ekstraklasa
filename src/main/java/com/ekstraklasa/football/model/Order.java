@@ -2,6 +2,7 @@ package com.ekstraklasa.football.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 
 @Entity
@@ -20,6 +21,7 @@ public class Order implements Serializable {
     private String district;
     private String email;
     private Integer numrooms;
+    private Date lastPush;
 
     public Order(){}
 
@@ -87,5 +89,13 @@ public class Order implements Serializable {
 
     public void setNumrooms(Integer numrooms) {
         this.numrooms = numrooms;
+    }
+
+    public Date getLastPush() {
+        return lastPush;
+    }
+
+    public void setLastPush(Date lastPush) {
+        this.lastPush = lastPush;
     }
 }

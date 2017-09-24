@@ -13,6 +13,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Serwis Ogłoszeniowy</title>
+    <link rel="shortcut icon" href="/resources/fabric.ico">
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -28,6 +29,17 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="/resources/dist/css/skins/_all-skins.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.min.js"></script>
+    <script src="https://fb.me/react-dom-15.0.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+    <script type="text/babel" src="/resources/jsr/app.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -45,11 +57,11 @@
 
     <header class="main-header">
         <!-- Logo -->
-        <a href="../../index2.html" class="logo">
+        <a href="/flats" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>A</b>LT</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>Admin</b>LTE</span>
+            <span class="logo-lg"><b>Flats </b>ogłoszenia</span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -70,7 +82,7 @@
                     <!-- Tasks: style can be found in dropdown.less -->
 
                     <!-- User Account: style can be found in dropdown.less -->
-                    <li class="dropdown user user-menu">
+                    <li class="dropdown user user-menu" style="display: none">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="/resources/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
                             <span class="hidden-xs">Admin</span>
@@ -124,7 +136,7 @@
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
             <!-- Sidebar user panel -->
-            <div class="user-panel">
+            <div class="user-panel" style="display: none">
                 <div class="pull-left image">
                     <img src="/resources/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                 </div>
@@ -157,9 +169,28 @@
 
                 </li>
 
+
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-folder"></i> <span>Powiadomienia</span>
+                        <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="${contextPath}/order"><i class="fa fa-circle-o"></i> Wszystkie</a></li>
+                        <li><a href="${contextPath}/order/new"><i class="fa fa-circle-o"></i> Dodaj nowe</a></li>
+                        <li><a href="${contextPath}/order/testorder"><i class="fa fa-circle-o"></i> Test</a></li>
+
+                    </ul>
+                </li>
+
+
+
                 <li><a href="${contextPath}/flats"><i class="fa fa-book"></i> <span>Mieszkania</span></a></li>
 
-                <li><a href="${contextPath}/flats/warszawa"><i class="fa fa-th"></i> <span>Mieszkania Warszawa</span></a></li>
+
 
                 <li class="treeview">
                     <a href="#">
@@ -213,6 +244,9 @@
 
 
                 <li><a href="https://adminlte.io/docs"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
+
+                <li><a href="/flats/pars01"><i class="fa fa-book"></i> <span>Test</span></a></li>
+
             </ul>
         </section>
         <!-- /.sidebar -->

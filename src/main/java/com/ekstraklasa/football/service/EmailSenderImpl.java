@@ -1,12 +1,15 @@
 package com.ekstraklasa.football.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class EmailSenderImpl implements EmailSender{
@@ -14,21 +17,35 @@ public class EmailSenderImpl implements EmailSender{
     @Autowired
     private JavaMailSender javaMailSender;
 
-    @Override
-    public void sendEmail(String to, String title, String content) {
-        MimeMessage mail = javaMailSender.createMimeMessage();
-        try {
-            MimeMessageHelper helper = new MimeMessageHelper(mail, true);
-            helper.setTo(to);
-            helper.setReplyTo("app.dk.897@gmail.com");
-            helper.setFrom("app.dk.897@gmail.com");
-            helper.setSubject(title);
-            helper.setText(content);
 
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void sendEmail(String to, String subject, String content) throws MailException {
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+
+
+        mail.setTo(to);
+        mail.setFrom("app.dk.897@gmail.com");
+        mail.setSubject(subject);
+        mail.setText(content);
 
         javaMailSender.send(mail);
+    }
+
+    public void sendEmail2(String to, String subject, String msg) {
+        try {
+
+            MimeMessage message = javaMailSender.createMimeMessage();
+
+            message.setSubject(subject);
+            MimeMessageHelper helper;
+            helper = new MimeMessageHelper(message, true);
+            helper.setFrom("app.dk.897@gmail.com");
+            helper.setTo(to);
+            helper.setText(msg, true);
+            javaMailSender.send(message);
+        } catch (MessagingException ex) {
+            //Logger.getLogger(HTMLMail.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

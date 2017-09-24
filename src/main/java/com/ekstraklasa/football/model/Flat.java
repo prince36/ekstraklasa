@@ -3,6 +3,7 @@ package com.ekstraklasa.football.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Flat implements Serializable{
@@ -19,7 +20,7 @@ public class Flat implements Serializable{
     //0-właściciel //1-pośrednik
     private Integer type_advertiser;
 
-    private String place;
+    private String place;//
     private String district;
     private String street;
 
@@ -192,5 +193,14 @@ public class Flat implements Serializable{
 
     public void setDatecreate(Date datecreate) {
         this.datecreate = datecreate;
+    }
+
+    public String getAllUrlsInOneString(List<Flat> list){
+        StringBuilder sb = new StringBuilder();
+        for (Flat flat: list) {
+            sb.append(flat.getUrl());
+            sb.append(" ");
+        }
+        return String.valueOf(sb);
     }
 }

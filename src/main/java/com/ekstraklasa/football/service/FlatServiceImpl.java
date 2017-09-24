@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Null;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -38,6 +40,28 @@ public class FlatServiceImpl implements FlatService {
         PageRequest request = new PageRequest(pageNumber - 1, PAGESIZE, Sort.Direction.ASC, "idflat");
 
         return flatRepository.findAll(request).getContent();
+    }
+
+    public List<Flat> getPageforCity(int pageNumber, String city) {
+        PageRequest request = new PageRequest(pageNumber - 1, PAGESIZE, Sort.Direction.ASC, "idflat");
+
+        return flatRepository.findByCity(city, request);
+    }
+
+    @Override
+    public Map<String, String> getAllCity() {
+        Map< String, String > country12 = new LinkedHashMap<String, String>();
+        for (String countr : flatRepository.findAllCity()) {
+            try {
+                if (countr.length()>3) {
+                    country12.put(countr, countr);
+                }
+            }
+            catch (NullPointerException xx){
+                //System.out.println("nullpointer");
+            }
+        }
+        return country12;
     }
 
 }
