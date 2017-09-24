@@ -27,6 +27,8 @@ public class od_parser {
     @Autowired
     FlatService flatService;
 
+
+
     // otodom.pl
     public Flat Parser_od(String url) throws IOException {
 

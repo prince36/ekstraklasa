@@ -29,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Flat> getFlatsPerOrderByDate(Order order) {
-        return flatRepository.findForOrderByDate(order.getLocation(),order.getDistrict(),order.getPrice_from(),order.getPrice_to(),order.getNumrooms(),order.getLastPush());
+        return flatRepository.findForOrderByDate(order.getLocation(),order.getPrice_from(),order.getPrice_to(),order.getNumrooms(),order.getLastPush());
     }
 
 
@@ -47,11 +47,17 @@ public class OrderServiceImpl implements OrderService {
     public String goPush(Order order) {
         StringBuilder sb = new StringBuilder();
         sb.append("<html>");
+        int licznik=1;
         for (Flat flat: getFlatsPerOrderByDate(order)) {
             sb.append("<p>");
+            sb.append(licznik);
+            sb.append(". ");
+            sb.append(flat.getPlace()+", "+flat.getDistrict()+" " +
+                    " "+flat.getPrice()+" złoty  ->");
             sb.append(flat.getUrl());
             sb.append("</p>");
             sb.append(" ");
+            licznik++;
         }
         sb.append("</html>");
         return String.valueOf(sb);
