@@ -20,7 +20,7 @@ public class Flat implements Serializable{
     //0-właściciel //1-pośrednik
     private Integer type_advertiser;
 
-    private String place;
+    private String place;//
     private String district;
     private String street;
 

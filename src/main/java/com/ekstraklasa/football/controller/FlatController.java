@@ -41,17 +41,11 @@ public class FlatController {
     public String homePage(Map<String, Object> map) throws IOException {
         od_parser od1 = new od_parser();
 
-        //pobieramy urle
-        ArrayList<String> allUrls = new ArrayList<String>();
-        allUrls = od1.getUrls_olx(1,5);
+        List<String> all = od1.getUrls_domGratka(1,20);
 
-        ArrayList<String> allUrls2 = flatService.removeDuplicate(allUrls);
-        System.out.println("Liczba nowych elementów: "+allUrls2.size());
-        //parsujemy strony
-        for (String url : allUrls2) {
-            flatRepository.save(od1.Parser_olx(url));
-        }
-        return "indexFlats2";
+
+        flatRepository.save(od1.Parser_domGratka("XXX"));
+        return "redirect:/";
     }
 
     //ALL FLATS

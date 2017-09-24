@@ -56,12 +56,14 @@ public class OrderController {
 
         for (Order order :
                 orderRepository.findAll()) {
+            System.out.println("998: "+order.getLastPush());
             if (orderService.goPush(order).length()>20){
-                emailSender.sendEmail(order.getEmail(), "ANCKLOX", orderService.goPush(order));
-                //order.setLastPush(Calendar.getInstance().getTime());
+                emailSender.sendEmail2(order.getEmail(), "ANCKLOX", orderService.goPush(order));
+                order.setLastPush(Calendar.getInstance().getTime());
                 orderRepository.save(order);
             }
         }
+        System.out.println("999: " +Calendar.getInstance().getTime());
         return "redirect:/";
     }
 

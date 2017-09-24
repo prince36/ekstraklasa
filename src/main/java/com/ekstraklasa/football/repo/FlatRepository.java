@@ -36,6 +36,9 @@ public interface FlatRepository extends JpaRepository<Flat, Long>, PagingAndSort
     List<Flat> findForOrder(String city, String district, Integer price_from, Integer price_to, Integer numrooms);
 
     @Query("SELECT c FROM Flat c WHERE c.place = ?1 and c.district = ?2 AND c.price > ?3 and c.price < ?4 and c.num_rooms=?5 and c.datecreate>?6 ORDER BY c.district asc, c.street asc")
-    List<Flat> findForOrderByDate(String city, String district, Integer price_from, Integer price_to, Integer numrooms, Date lastpush);
+    List<Flat> findForOrderByDate2(String city, String district, Integer price_from, Integer price_to, Integer numrooms, Date lastpush);
+
+    @Query("SELECT c FROM Flat c WHERE c.place = ?1 AND c.price > ?2 and c.price < ?3 and c.num_rooms=?4 and c.datecreate>?5 ORDER BY c.district asc, c.street asc")
+    List<Flat> findForOrderByDate(String city, Integer price_from, Integer price_to, Integer numrooms, Date lastpush);
 
 }

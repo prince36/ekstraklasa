@@ -31,4 +31,21 @@ public class EmailSenderImpl implements EmailSender{
 
         javaMailSender.send(mail);
     }
+
+    public void sendEmail2(String to, String subject, String msg) {
+        try {
+
+            MimeMessage message = javaMailSender.createMimeMessage();
+
+            message.setSubject(subject);
+            MimeMessageHelper helper;
+            helper = new MimeMessageHelper(message, true);
+            helper.setFrom("app.dk.897@gmail.com");
+            helper.setTo(to);
+            helper.setText(msg, true);
+            javaMailSender.send(message);
+        } catch (MessagingException ex) {
+            //Logger.getLogger(HTMLMail.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

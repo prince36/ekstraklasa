@@ -34,6 +34,9 @@ public class od_parser {
         Flat flat = new Flat();
         FlatDetail flatd = new FlatDetail();
 
+        //Data utworzenia
+        flat.setDatecreate(Calendar.getInstance().getTime());
+
         try{
             System.out.println("Jestem na - "+url);
 
@@ -98,8 +101,6 @@ public class od_parser {
             newsHeadlines = doc.select("body > div.article-offer > section.section-offer-map.hidden-print > div > div > div > div > div.row > div:nth-child(2) > div.ad-map-location-holder > h4");
             flat.setStreet(newsHeadlines.text());
 
-            //Data utworzenia
-            flat.setDatecreate(Calendar.getInstance().getTime());
 
             //FlatDetail flatDetail;
             newsHeadlines = doc.select("body > div.article-offer > section:nth-child(1) > div > div > header > h1");
@@ -184,15 +185,17 @@ public class od_parser {
         }
         catch (NumberFormatException a){
             System.out.println("NumberFormatException");
+            return null;
         }
         catch (Exception s) {
             System.out.println("bład");
+            return null;
         }
 
 
         //timeout
         try {
-            Thread.sleep(4000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -216,8 +219,6 @@ public class od_parser {
         }
         return allUrls;
     }
-
-
 
 
 
@@ -261,8 +262,12 @@ public class od_parser {
         //FlatDetail dlatdetail = new FlatDetail();
         Elements newsHeadlines;// = doc.select("#parameters > ul:nth-child(1)");
 
+        //Data utworzenia
+        flat.setDatecreate(Calendar.getInstance().getTime());
+
         flat.setUrl(url);
 
+        try{
         //title;+-
         newsHeadlines = doc.select("#offerdescription > div.offer-titlebox > h1");
         flat.setTitle(newsHeadlines.text());
@@ -293,9 +298,6 @@ public class od_parser {
         //String street;+
         newsHeadlines = doc.select("#offerdescription > div.offer-titlebox > div.offer-titlebox__details > a > strong");
         //flat.setStreet(newsHeadlines.text());
-
-        //Data utworzenia
-        flat.setDatecreate(Calendar.getInstance().getTime());
 
         //FlatDetail flatDetail;
         newsHeadlines = doc.select("#offerdescription > div.offer-titlebox > h1");
@@ -361,6 +363,15 @@ public class od_parser {
         }
         flat.setFlatDetail(flatd);
         flat.flatToString();
+        }
+        catch (NumberFormatException a){
+            System.out.println("NumberFormatException");
+            return null;
+        }
+        catch (Exception s) {
+            System.out.println("bład");
+            return null;
+        }
 
         //timeout
         try {
@@ -370,6 +381,8 @@ public class od_parser {
         }
         return flat;
     }
+
+
 
     public ArrayList<String> getUrls_dp(Integer pageStart, Integer pageEnd) throws IOException {
         ArrayList<String> allUrls = new ArrayList<String>();
@@ -518,7 +531,6 @@ public class od_parser {
 
 
 
-
     //todo
     public ArrayList<String> getUrls_gt(Integer pageStart, Integer pageEnd) throws IOException {
         ArrayList<String> allUrls = new ArrayList<String>();
@@ -664,6 +676,105 @@ public class od_parser {
         }
         return flat;
     }
+
+
+
+
+
+
+
+
+    // dom.gratka.pl
+    public Flat Parser_domGratka(String url) throws IOException {
+
+        //url="http://dom.gratka.pl/tresc/401-73780627-lodzkie-lodz-retkinia-retkinska-118.html";
+
+        Document doc = Jsoup.connect(url).get();
+        Flat flat = new Flat();
+        FlatDetail flatd = new FlatDetail();
+
+        try{
+            System.out.println("Jestem na - "+url);
+
+            //FlatDetail dlatdetail = new FlatDetail();
+            Elements newsHeadlines;// = doc.select("#parameters > ul:nth-child(1)");
+
+            flat.setUrl(url);
+
+            //title;+
+            newsHeadlines = doc.select("#karta-naglowek > div > div > h1");
+            flat.setTitle(newsHeadlines.text());
+
+            //description;+
+            newsHeadlines = doc.select("#dane-podstawowe > div > div.opis > p");
+            flatd.setDescription(newsHeadlines.text());
+
+            //price;+
+            newsHeadlines = doc.select("#karta-ogloszenia > div > div.small-12.large-4.columns > div.cenaGlowna > p > b");
+            flat.setPrice(Integer.parseInt(newsHeadlines.text().replaceAll( "[^\\d]", "" )));
+
+            //area;+
+            newsHeadlines = doc.select("#karta-naglowek > div > ul > li:nth-child(2) > b");
+            flat.setArea(Integer.parseInt(newsHeadlines.text().replaceAll( "[^\\d]", "" )));
+
+            //num_rooms;+
+            newsHeadlines = doc.select("#karta-naglowek > div > ul > li:nth-child(1) > b");
+            flat.setNum_rooms(Integer.parseInt(newsHeadlines.text().replaceAll( "[^\\d]", "" )));
+
+            //String place;+
+            newsHeadlines = doc.select("#nawigator > p > a:nth-child(7)");
+            flat.setPlace(newsHeadlines.text());
+
+            //String district;+
+            newsHeadlines = doc.select("#nawigator > p > a:nth-child(8)");
+            flat.setDistrict(newsHeadlines.text());
+
+            //Data utworzenia
+            flat.setDatecreate(Calendar.getInstance().getTime());
+
+
+            flat.setFlatDetail(flatd);
+            flat.flatToString();
+        }
+        catch (NumberFormatException a){
+            System.out.println("NumberFormatException");
+        }
+        catch (Exception s) {
+            System.out.println("bład");
+        }
+
+
+        //timeout
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return flat;
+    }
+
+    public ArrayList<String> getUrls_domGratka(Integer pageStart, Integer pageEnd) throws IOException {
+        ArrayList<String> allUrls = new ArrayList<String>();
+
+        for (int i = pageStart; i < pageEnd+1 ; i++) {
+            Document doc = Jsoup.connect("http://dom.gratka.pl/mieszkania/wynajem/?s="+i).get();
+            Elements links = doc.getElementsByClass("ogloszenie");
+            for (Element link : links) {
+                Elements cols = link.select("a[href]");
+                for (Element col : cols) {
+                    String item = "http://dom.gratka.pl"+col.getElementsByTag("a").attr("href");
+                    allUrls.add(item);
+                    }
+                }
+            }
+
+        return allUrls;
+    }
+
+
+
+
+
 
 
 
